@@ -1,0 +1,11 @@
+# Atividades fora do Hevy que nao aparecem nos seus treinos de musculacao mas
+# podem contribuir pra fadiga/recuperacao. O Diagnostico usa isso pra anotar
+# insights de grupos musculares afetados, em vez de atribuir tudo so ao treino
+# de ferro. Edite/adicione conforme sua rotina mudar.
+
+external_activities:
+  - name: Vôlei
+    affected_muscle_groups: [quadriceps, hamstrings, calves, glutes, shoulders, abdominals]
+    note: >-
+      Você também tem aula de vôlei às segundas e quartas, que pode contribuir
+      para fadiga nesse grupo além do treino de musculação.

@@ -25,6 +25,13 @@ class PlateauRule:
 
 
 @dataclass(frozen=True)
+class ResponsivenessRule:
+    min_trained_weeks: int
+    min_weeks_per_side: int
+    signal_threshold_pct: float
+
+
+@dataclass(frozen=True)
 class Landmarks:
     hard_set_types: list[str]
     secondary_muscle_credit: float
@@ -34,6 +41,8 @@ class Landmarks:
     max_reps_for_estimate: int
     deload_rule: DeloadRule
     plateau_rule: PlateauRule
+    inactive_days: int
+    responsiveness_rule: ResponsivenessRule
 
     def landmark_for(self, muscle_group: str) -> VolumeLandmark:
         return self.muscle_groups.get(muscle_group, self.default_landmark)
@@ -58,6 +67,8 @@ def load_landmarks(path: Path) -> Landmarks:
         max_reps_for_estimate=raw["one_rep_max"]["max_reps_for_estimate"],
         deload_rule=DeloadRule(**raw["rpe_rules"]["deload"]),
         plateau_rule=PlateauRule(**raw["rpe_rules"]["plateau"]),
+        inactive_days=raw["staleness"]["inactive_days"],
+        responsiveness_rule=ResponsivenessRule(**raw["responsiveness"]),
     )
 
 

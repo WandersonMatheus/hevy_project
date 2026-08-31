@@ -11,7 +11,7 @@ class Insight:
     metrics: dict = field(default_factory=dict)
     muscle_group: str | None = None
     exercise: str | None = None
-    severity: Literal["info", "warning", "critical"] = "info"
+    severity: Literal["positive", "info", "warning", "critical"] = "info"
     created_at: str | None = None
 
     def to_markdown(self) -> str:

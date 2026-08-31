@@ -45,3 +45,17 @@ rpe_rules:
   plateau:
     window_sessions: 5
     min_e1rm_improvement_pct: 2.0  # abaixo disso na janela = plato
+
+staleness:
+  # Se as ultimas sessoes usadas pra platô/fadiga de um exercicio sao mais
+  # antigas que isso, nao gera alerta -- entende-se que voce trocou de
+  # exercicio, nao que estagnou nele.
+  inactive_days: 90
+
+responsiveness:
+  # Analise exploratoria de "volume alto essa semana precede mais producao
+  # (tonnage) na semana seguinte?", por grupo muscular. Correlacional, com
+  # poucas semanas de dado -- tratar como hipotese, nao conclusao.
+  min_trained_weeks: 8
+  min_weeks_per_side: 3   # minimo de semanas de "alto volume" e "baixo volume" pra comparar
+  signal_threshold_pct: 15  # diferenca minima (pontos percentuais) pra considerar sinal claro

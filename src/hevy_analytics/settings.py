@@ -8,6 +8,7 @@ load_dotenv(PROJECT_ROOT / ".env")
 
 DB_PATH = PROJECT_ROOT / "data" / "hevy.db"
 LANDMARKS_PATH = PROJECT_ROOT / "config" / "landmarks.yaml"
+CONTEXT_PATH = PROJECT_ROOT / "config" / "context.yaml"
 
 HEVY_API_KEY = os.environ.get("HEVY_API_KEY", "")
 HEVY_BASE_URL = "https://api.hevyapp.com/v1"

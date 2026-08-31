@@ -81,3 +81,42 @@ CREATE TABLE IF NOT EXISTS sync_log (
     status              TEXT,
     error_message       TEXT
 );
+
+-- Manually logged, since Hevy's API doesn't track bodyweight. One entry per
+-- calendar date; logging again on the same date overwrites (upsert).
+CREATE TABLE IF NOT EXISTS bodyweight_logs (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    log_date    TEXT NOT NULL UNIQUE,
+    weight_kg   REAL NOT NULL,
+    created_at  TEXT DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_bodyweight_log_date ON bodyweight_logs(log_date);
+
+-- goal_type: 'exercise_weight' | 'bodyweight_multiple' | 'baseline_multiple' | 'pain'
+--   exercise_weight:      target_value = fixed kg total, exercise_template_id set
+--   bodyweight_multiple:  target_value = multiplier of current bodyweight, muscle_groups set
+--   baseline_multiple:    target_value = multiplier of e1RM captured AT CREATION (baseline_json), muscle_groups set
+--   pain:                 target_value = target pain score (usually 0), body_part set
+CREATE TABLE IF NOT EXISTS goals (
+    id                    INTEGER PRIMARY KEY AUTOINCREMENT,
+    label                 TEXT NOT NULL,
+    goal_type             TEXT NOT NULL,
+    exercise_template_id  TEXT REFERENCES exercise_templates(id),
+    muscle_groups         TEXT,      -- JSON array, for muscle-group-scoped goals
+    target_value          REAL NOT NULL,
+    baseline_json         TEXT,      -- JSON {exercise_template_id: baseline_e1rm}, only for baseline_multiple
+    body_part             TEXT,      -- free text, only for pain goals
+    active                INTEGER NOT NULL DEFAULT 1,
+    created_at            TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS pain_logs (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    log_date    TEXT NOT NULL,
+    body_part   TEXT NOT NULL,
+    pain_score  REAL NOT NULL,
+    notes       TEXT,
+    created_at  TEXT DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(log_date, body_part)
+);
+CREATE INDEX IF NOT EXISTS idx_pain_logs_body_part ON pain_logs(body_part);

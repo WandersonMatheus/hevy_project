@@ -7,19 +7,19 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 import plotly.express as px
 import streamlit as st
 
-from _shared import get_landmarks, get_sets_df, get_workouts_df
+from _shared import get_db_connection, get_landmarks, get_sets_df, get_workouts_df, render_insight_cards
 from hevy_analytics.analytics.descriptive import (
     exercise_variety,
+    generate_descriptive_insights,
     session_duration,
     session_frequency,
     tonnage_trend,
     weekly_muscle_group_volume,
 )
 from hevy_analytics.data_access import load_exercise_templates
-from _shared import get_db_connection
 
-st.set_page_config(page_title="Descritivo — Hevy Analytics", page_icon="📊", layout="wide")
-st.title("📊 Descritivo — o que aconteceu")
+st.set_page_config(page_title="Descritivo — Hevy Analytics", layout="wide")
+st.title("Descritivo — o que aconteceu")
 
 workouts_df = get_workouts_df()
 sets_df = get_sets_df()
@@ -30,6 +30,14 @@ if workouts_df.empty:
     st.info("Sem dados ainda. Sincronize na página inicial primeiro.")
     st.stop()
 
+volume_df = weekly_muscle_group_volume(sets_df, templates_df, landmarks)
+
+st.subheader("Insights da semana")
+insights = generate_descriptive_insights(workouts_df, sets_df, volume_df, landmarks)
+render_insight_cards(insights, empty_message="Dados insuficientes ainda para gerar insights (histórico curto).")
+
+st.divider()
+
 st.subheader("Tonnage semanal")
 st.plotly_chart(
     px.line(tonnage_trend(sets_df), x="week", y="tonnage", markers=True),
@@ -37,7 +45,6 @@ st.plotly_chart(
 )
 
 st.subheader("Hard sets por semana e grupo muscular")
-volume_df = weekly_muscle_group_volume(sets_df, templates_df, landmarks)
 if volume_df.empty:
     st.info("Sem sets classificados ainda.")
 else:
