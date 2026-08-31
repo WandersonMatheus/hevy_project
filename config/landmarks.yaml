@@ -1,0 +1,47 @@
+# Volume landmarks estao em HARD SETS POR SEMANA por grupo muscular.
+# Fonte: framework geral de MEV/MAV/MRV (Renaissance Periodization) e
+# meta-analises de volume de treino (ex: Schoenfeld et al.). Sao pontos de
+# partida comumente citados para um praticante intermediario, NAO valores
+# validados especificamente para voce -- ajuste livremente conforme voce
+# estudar mais e observar como seu corpo responde.
+
+hard_set_types: ["normal", "failure", "dropset"]  # "warmup" fica de fora
+
+secondary_muscle_credit: 0.5  # fracao de um hard set creditada a um musculo
+                               # quando ele e mobilizador secundario (nao primario)
+
+# Chaves usam o vocabulario real da API do Hevy (primary_muscle_group /
+# secondary_muscle_groups em /v1/exercise_templates).
+muscle_groups:
+  chest:       { mev: 8,  mav: 14, mrv: 22 }
+  upper_back:  { mev: 10, mav: 16, mrv: 25 }
+  lats:        { mev: 8,  mav: 14, mrv: 22 }
+  lower_back:  { mev: 4,  mav: 8,  mrv: 14 }
+  shoulders:   { mev: 8,  mav: 16, mrv: 24 }
+  biceps:      { mev: 6,  mav: 12, mrv: 20 }
+  triceps:     { mev: 6,  mav: 12, mrv: 20 }
+  forearms:    { mev: 4,  mav: 10, mrv: 18 }
+  quadriceps:  { mev: 8,  mav: 14, mrv: 20 }
+  hamstrings:  { mev: 6,  mav: 12, mrv: 20 }
+  glutes:      { mev: 6,  mav: 12, mrv: 20 }
+  adductors:   { mev: 4,  mav: 10, mrv: 16 }
+  abductors:   { mev: 4,  mav: 10, mrv: 16 }
+  calves:      { mev: 8,  mav: 14, mrv: 20 }
+  abdominals:  { mev: 6,  mav: 14, mrv: 25 }
+  traps:       { mev: 4,  mav: 10, mrv: 18 }
+  full_body:   { mev: 0,  mav: 0,  mrv: 999 }  # ex: clean/burpee, sem landmark
+  cardio:      { mev: 0,  mav: 0,  mrv: 999 }  # fora do escopo de volume de forca
+  default:     { mev: 6,  mav: 12, mrv: 20 }   # fallback p/ grupo nao listado
+
+one_rep_max:
+  primary_formula: epley   # epley | brzycki
+  max_reps_for_estimate: 12  # sets com mais reps que isso saem da estimativa
+
+rpe_rules:
+  deload:
+    window_sessions: 3
+    rpe_increase_threshold: 1.5   # pontos de RPE subindo em carga ~constante
+    weight_tolerance_pct: 2.5     # o que conta como "mesma carga"
+  plateau:
+    window_sessions: 5
+    min_e1rm_improvement_pct: 2.0  # abaixo disso na janela = plato

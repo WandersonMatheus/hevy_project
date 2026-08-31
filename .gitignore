@@ -1,0 +1,11 @@
+.env
+data/*.db
+data/*.sqlite3
+data/*.sqlite3-journal
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.streamlit/secrets.toml
+.DS_Store
