@@ -69,11 +69,12 @@ Abre automaticamente em `http://localhost:8501`. Se não abrir, acesse esse ende
 
 ### 4. Primeiro uso
 
-1. Na **Home**, clique em **Sincronizar** — na primeira vez isso importa todo o seu histórico do Hevy (pode levar alguns segundos a minutos, dependendo de quantos treinos você tem). Nas próximas vezes, o mesmo botão busca só o que mudou desde o último sync.
-2. (Opcional) Registre seu **peso corporal** na Home — usado nas métricas de força relativa e nas metas de "múltiplo do peso corporal".
-3. Navegue pelas abas no menu à esquerda: **Descritivo**, **Diagnóstico**, **Preditivo**, **Prescritivo** e **Metas**.
-4. (Opcional) Ajuste `config/landmarks.yaml` (volume/1RM/platô) e `config/context.yaml` (atividades externas) conforme sua realidade — nenhum dos dois exige mexer em código.
-5. (Opcional) Crie metas na aba **Metas** — peso alvo num exercício, múltiplo do peso corporal, dobrar carga atual, ou uma meta de redução de dor.
+A **Home** é uma capa que explica as sessões do app — a partir dela (ou do menu à esquerda) você navega para:
+
+1. **Painel**: clique em **Sincronizar** — na primeira vez isso importa todo o seu histórico do Hevy (pode levar alguns segundos a minutos, dependendo de quantos treinos você tem). Nas próximas vezes, o mesmo botão busca só o que mudou desde o último sync. Também é onde você registra seu **peso corporal** (opcional, usado em métricas de força relativa e metas de "múltiplo do peso corporal") e vê o resumo de pontos de atenção/destaques positivos.
+2. Navegue pelas demais sessões no menu à esquerda: **Descritivo**, **Diagnóstico**, **Preditivo**, **Prescritivo** e **Metas**.
+3. (Opcional) Ajuste `config/landmarks.yaml` (volume/1RM/platô) e `config/context.yaml` (atividades externas) conforme sua realidade — nenhum dos dois exige mexer em código.
+4. (Opcional) Crie metas na sessão **Metas** — peso alvo num exercício, múltiplo do peso corporal, dobrar carga atual, ou uma meta de redução de dor.
 
 Pra rodar de novo numa sessão futura, só repita o passo 3 (ativar o venv já criado e chamar o streamlit) — não precisa reinstalar nada.
 
