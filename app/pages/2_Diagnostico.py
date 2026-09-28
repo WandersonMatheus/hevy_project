@@ -7,7 +7,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 import plotly.express as px
 import streamlit as st
 
-from _shared import get_context, get_db_connection, get_landmarks, get_sets_df, render_insight_cards
+from _shared import (
+    SEMANTIC_COLORS,
+    TEXT_MUTED,
+    get_context,
+    get_db_connection,
+    get_landmarks,
+    get_sets_df,
+    render_insight_cards,
+    style_fig,
+)
 from hevy_analytics.analytics.descriptive import weekly_muscle_group_volume
 from hevy_analytics.analytics.diagnostic import (
     classify_volume,
@@ -60,12 +69,18 @@ with tab_chart:
         latest_week = classified["week"].max()
         latest = classified[classified["week"] == latest_week].sort_values("muscle_group")
 
-        fig = px.bar(latest, x="muscle_group", y="hard_sets", color="classification")
+        classification_colors = {
+            "below_mev": SEMANTIC_COLORS["warning"],
+            "mev_to_mav": SEMANTIC_COLORS["positive"],
+            "mav_to_mrv": SEMANTIC_COLORS["info"],
+            "above_mrv": SEMANTIC_COLORS["critical"],
+        }
+        fig = px.bar(latest, x="muscle_group", y="hard_sets", color="classification", color_discrete_map=classification_colors)
         for _, row in latest.iterrows():
             lm = landmarks.landmark_for(row["muscle_group"])
-            fig.add_hline(y=lm.mev, line_dash="dot", line_color="gray")
-            fig.add_hline(y=lm.mrv, line_dash="dot", line_color="red")
-        st.plotly_chart(fig, use_container_width=True)
+            fig.add_hline(y=lm.mev, line_dash="dot", line_color=TEXT_MUTED)
+            fig.add_hline(y=lm.mrv, line_dash="dot", line_color=SEMANTIC_COLORS["critical"])
+        st.plotly_chart(style_fig(fig), use_container_width=True)
         st.caption("Linhas pontilhadas: cinza = MEV, vermelha = MRV, por grupo muscular.")
         with st.expander("Ver tabela"):
             st.dataframe(latest, use_container_width=True)

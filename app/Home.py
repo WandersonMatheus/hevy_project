@@ -7,15 +7,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 import streamlit as st
 
+from _shared import BLUE, BORDER, GREEN, NAVY_LIGHT, NAVY_LIGHTER, TEXT_MUTED
+
 st.set_page_config(page_title="Hevy Analytics", layout="wide")
 
 LOGO_PATH = Path(__file__).resolve().parent / "assets" / "logo.png"
 _logo_b64 = base64.b64encode(LOGO_PATH.read_bytes()).decode() if LOGO_PATH.exists() else ""
-
-NAVY = "#0B1120"
-NAVY_LIGHT = "#141B2E"
-BLUE = "#23ADED"
-GREEN = "#A3E635"
 
 st.markdown(
     f"""
@@ -23,11 +20,11 @@ st.markdown(
         div[data-testid="stAppViewContainer"] > .main {{ padding-top: 0; }}
         div[data-testid="stMainBlockContainer"] {{ padding-top: 0; }}
     </style>
-    <div style="background:linear-gradient(135deg, {NAVY} 0%, {NAVY_LIGHT} 100%);
-                border-radius:16px; padding:3rem 2.5rem; margin-bottom:2rem; text-align:center;">
+    <div style="background:linear-gradient(135deg, {NAVY_LIGHT} 0%, {NAVY_LIGHTER} 100%);
+                border:1px solid {BORDER}; border-radius:16px; padding:3rem 2.5rem; margin-bottom:2rem; text-align:center;">
         <img src="data:image/png;base64,{_logo_b64}" style="width:88px; height:88px; border-radius:18px; margin-bottom:1.2rem;">
         <div style="font-size:2.2rem; font-weight:700; color:white; margin-bottom:0.5rem;">Hevy Analytics</div>
-        <div style="font-size:1.05rem; color:#B8C4DA; max-width:640px; margin:0 auto;">
+        <div style="font-size:1.05rem; color:{TEXT_MUTED}; max-width:640px; margin:0 auto;">
             Seus treinos do Hevy, cruzados com ciência do esporte, em quatro camadas de análise
             <span style="color:{BLUE};">descritiva</span>, <span style="color:{BLUE};">diagnóstica</span>,
             <span style="color:{BLUE};">preditiva</span> e <span style="color:{BLUE};">prescritiva</span> —
@@ -54,10 +51,10 @@ for i, (title, path, desc, accent) in enumerate(SESSIONS):
     with cols[i % 3]:
         st.markdown(
             f"""
-            <div style="border:1px solid #E2E8F0; border-left:4px solid {accent}; border-radius:8px;
+            <div style="background:{NAVY_LIGHT}; border:1px solid {BORDER}; border-left:4px solid {accent}; border-radius:8px;
                         padding:1rem 1.2rem; margin-bottom:0.8rem; min-height:132px;">
-                <div style="font-weight:700; font-size:1.05rem; margin-bottom:0.35rem;">{title}</div>
-                <div style="font-size:0.88rem; color:#475569; line-height:1.4;">{desc}</div>
+                <div style="font-weight:700; font-size:1.05rem; color:white; margin-bottom:0.35rem;">{title}</div>
+                <div style="font-size:0.88rem; color:{TEXT_MUTED}; line-height:1.4;">{desc}</div>
             </div>
             """,
             unsafe_allow_html=True,

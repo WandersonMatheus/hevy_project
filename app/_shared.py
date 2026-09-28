@@ -20,6 +20,47 @@ from hevy_analytics.data_access import (
 from hevy_analytics.db.connection import get_connection, init_db
 from hevy_analytics.settings import CONTEXT_PATH, DB_PATH, LANDMARKS_PATH
 
+# Brand palette, sampled from the project logo (app/assets/logo.png).
+NAVY = "#0B1120"
+NAVY_LIGHT = "#141B2E"
+NAVY_LIGHTER = "#1B2438"
+BLUE = "#23ADED"
+GREEN = "#A3E635"
+TEXT = "#E5E9F0"
+TEXT_MUTED = "#9AA6BC"
+BORDER = "#26304A"
+
+# Extended categorical palette for charts with many series (e.g. per-muscle-
+# group bars): starts with the two brand colors, then fills out with hues
+# chosen for contrast against each other and against the navy background.
+CATEGORICAL_PALETTE = [
+    BLUE, GREEN, "#F59E0B", "#F472B6", "#818CF8", "#2DD4BF",
+    "#FB7185", "#FACC15", "#38BDF8", "#4ADE80", "#C084FC", "#FDBA74",
+]
+
+# Shared with severity styling below, so a chart's category colors read the
+# same way as the insight cards (e.g. "above_mrv" is always the same red).
+SEMANTIC_COLORS = {"critical": "#F87171", "warning": "#FBBF24", "info": BLUE, "positive": GREEN}
+
+
+def style_fig(fig):
+    """Applies the brand palette/dark theme to a Plotly figure. Plotly Express
+    assigns trace colors at creation time, so for multi-series charts also
+    pass color_discrete_sequence=CATEGORICAL_PALETTE (or color_discrete_map)
+    directly to px.bar/px.line -- this just handles layout/background/font,
+    which apply regardless of how traces were colored."""
+    fig.update_layout(
+        template="plotly_dark",
+        paper_bgcolor=NAVY_LIGHT,
+        plot_bgcolor=NAVY_LIGHT,
+        font_color=TEXT,
+        legend_title_text="",
+        margin=dict(t=30, l=10, r=10, b=10),
+    )
+    fig.update_xaxes(gridcolor=BORDER, zerolinecolor=BORDER)
+    fig.update_yaxes(gridcolor=BORDER, zerolinecolor=BORDER)
+    return fig
+
 
 @st.cache_resource
 def get_db_connection():
@@ -128,10 +169,10 @@ def compute_all_insights():
 
 _SEVERITY_ORDER = {"critical": 0, "warning": 1, "info": 2, "positive": 3}
 _SEVERITY_STYLE = {
-    "critical": {"label": "Crítico", "color": "#B91C1C", "bg": "#FDF2F2"},
-    "warning": {"label": "Atenção", "color": "#B45309", "bg": "#FEF9EE"},
-    "info": {"label": "Info", "color": "#475569", "bg": "#F6F7F9"},
-    "positive": {"label": "Positivo", "color": "#15803D", "bg": "#F1FAF4"},
+    "critical": {"label": "Crítico", "color": SEMANTIC_COLORS["critical"], "bg": "#2A1418"},
+    "warning": {"label": "Atenção", "color": SEMANTIC_COLORS["warning"], "bg": "#2A2210"},
+    "info": {"label": "Info", "color": SEMANTIC_COLORS["info"], "bg": "#122436"},
+    "positive": {"label": "Positivo", "color": SEMANTIC_COLORS["positive"], "bg": "#1F2A0E"},
 }
 
 
@@ -158,8 +199,8 @@ def render_insight_cards(insights, empty_message: str = "Nada a reportar no mome
                             text-transform:uppercase; color:{style['color']}; margin-bottom:0.2rem;">
                     {style['label']}
                 </div>
-                <div style="font-weight:600; margin-bottom:0.2rem;">{html.escape(insight.title)}</div>
-                <div style="font-size:0.92rem; color:#334155; line-height:1.5; white-space:pre-line;">{html.escape(insight.body)}</div>
+                <div style="font-weight:600; color:{TEXT}; margin-bottom:0.2rem;">{html.escape(insight.title)}</div>
+                <div style="font-size:0.92rem; color:{TEXT_MUTED}; line-height:1.5; white-space:pre-line;">{html.escape(insight.body)}</div>
             </div>
             """,
             unsafe_allow_html=True,

@@ -8,7 +8,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
-from _shared import get_db_connection, get_landmarks, get_latest_bodyweight, get_sets_df, render_insight_cards
+from _shared import BLUE, GREEN, get_db_connection, get_landmarks, get_latest_bodyweight, get_sets_df, render_insight_cards, style_fig
 from hevy_analytics.analytics.predictive import (
     best_e1rm_per_session,
     generate_overview_insight,
@@ -77,6 +77,8 @@ fig.add_trace(
         y=exercise_data["e1rm"],
         mode="markers+lines",
         name="e1RM registrado",
+        line=dict(color=BLUE),
+        marker=dict(color=BLUE),
     )
 )
 if trend["projected_points"]:
@@ -87,7 +89,8 @@ if trend["projected_points"]:
             y=proj_df["e1rm"],
             mode="lines+markers",
             name="Projeção (linear)",
-            line=dict(dash="dash"),
+            line=dict(dash="dash", color=GREEN),
+            marker=dict(color=GREEN),
         )
     )
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(style_fig(fig), use_container_width=True)
