@@ -16,24 +16,66 @@ Sem machine learning, sem caixa-preta: todo threshold usado (volume por grupo mu
 - **Metas com estimativa de prazo** — peso alvo num exercício específico, múltiplo do peso corporal num grupo muscular, dobrar a carga atual, ou uma meta de redução de dor/sintoma. Cada meta reaproveita a análise de volume/responsividade pra sugerir a alavanca mais relevante, e projeta prazo por regressão linear simples sobre a tendência recente.
 - **Resumo na Home** — pontos de atenção e destaques positivos mais relevantes, sem precisar entrar em cada aba.
 
-## Setup
+## Como rodar
+
+### Pré-requisitos
+
+- Python 3.11+
+- Conta Hevy Pro (a API é um recurso pago do Hevy) e uma API key gerada em [hevy.com/settings?developer](https://hevy.com/settings?developer)
+
+### 1. Clonar e instalar
 
 ```bash
+git clone https://github.com/WandersonMatheus/hevy_project.git
+cd hevy_project
 python -m venv .venv
-.venv\Scripts\activate          # Windows
-pip install -r requirements.txt
-copy .env.example .env          # depois edite .env e cole sua HEVY_API_KEY
 ```
 
-A key da API do Hevy é gerada em [hevy.com/settings?developer](https://hevy.com/settings?developer) (requer Hevy Pro).
+Ativar o ambiente virtual:
 
-## Rodando
+```bash
+.venv\Scripts\activate       # Windows
+source .venv/bin/activate    # macOS/Linux
+```
+
+Instalar as dependências:
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Configurar a API key
+
+```bash
+copy .env.example .env       # Windows
+cp .env.example .env         # macOS/Linux
+```
+
+Abra o `.env` criado e cole sua key:
+
+```
+HEVY_API_KEY=sua-key-aqui
+```
+
+Esse arquivo nunca é commitado (está no `.gitignore`) — a key fica só na sua máquina.
+
+### 3. Rodar o app
 
 ```bash
 streamlit run app/Home.py
 ```
 
-Na primeira execução, clique em **Sincronizar** para importar todo o histórico. Nas próximas vezes, o mesmo botão busca só o que mudou desde o último sync.
+Abre automaticamente em `http://localhost:8501`. Se não abrir, acesse esse endereço manualmente.
+
+### 4. Primeiro uso
+
+1. Na **Home**, clique em **Sincronizar** — na primeira vez isso importa todo o seu histórico do Hevy (pode levar alguns segundos a minutos, dependendo de quantos treinos você tem). Nas próximas vezes, o mesmo botão busca só o que mudou desde o último sync.
+2. (Opcional) Registre seu **peso corporal** na Home — usado nas métricas de força relativa e nas metas de "múltiplo do peso corporal".
+3. Navegue pelas abas no menu à esquerda: **Descritivo**, **Diagnóstico**, **Preditivo**, **Prescritivo** e **Metas**.
+4. (Opcional) Ajuste `config/landmarks.yaml` (volume/1RM/platô) e `config/context.yaml` (atividades externas) conforme sua realidade — nenhum dos dois exige mexer em código.
+5. (Opcional) Crie metas na aba **Metas** — peso alvo num exercício, múltiplo do peso corporal, dobrar carga atual, ou uma meta de redução de dor.
+
+Pra rodar de novo numa sessão futura, só repita o passo 3 (ativar o venv já criado e chamar o streamlit) — não precisa reinstalar nada.
 
 ## Testes
 
